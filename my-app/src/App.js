@@ -17,14 +17,14 @@ function App() {
   const [historyIndex, setHistoryIndex] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventToday, setEventToday] = useState(false);
-  const [matches, setMatches] = useState(['Match 1', 'Match 2', 'Match 3']);
+  const [matches, setMatches] = useState([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
   const [companyStats, setCompanyStats] = useState({
     totalMoney: 1000000,
     wrestlers: 20,
     upcomingEvents: [
-      { name: 'Event 1', matches: ['Match 1', 'Match 2'] },
-      { name: 'Event 2', matches: ['Match 3', 'Match 4'] }
+      { name: 'Event 1', date: new Date(2025, 0, 2), matches: ['Match 1', 'Match 2'], wrestlers: [['Wrestler 1', 'Wrestler 2'], ['Wrestler 3', 'Wrestler 4']] },
+      { name: 'Event 2', date: new Date(2025, 0, 3), matches: ['Match 3', 'Match 4'], wrestlers: [['Wrestler 5', 'Wrestler 6'], ['Wrestler 7', 'Wrestler 8']] }
     ]
   });
 
@@ -41,6 +41,7 @@ function App() {
     if (event) {
       setSelectedEvent(event);
       setEventToday(true);
+      setMatches(event.matches); // Ensure matches are set for the selected event
     }
   };
 
@@ -60,11 +61,28 @@ function App() {
     }
   };
 
+  const checkForEvent = (currentDate) => {
+    const event = companyStats.upcomingEvents.find(event => 
+      event.date.toDateString() === currentDate.toDateString()
+    );
+    if (event) {
+      setEventToday(true);
+      setSelectedEvent(event);
+      setMatches(event.matches); // Ensure matches are set for the selected event
+      return event;
+    } else {
+      setEventToday(false);
+      setSelectedEvent(null);
+      setMatches([]); // Clear matches if no event
+      return null;
+    }
+  };
+
   return (
     <DateProvider>
       <CompanyProvider>
         <div className="app-container">
-          <LeftColumn handleViewChange={handleViewChange} onBack={handleBack} onForward={handleForward} />
+          <LeftColumn handleViewChange={handleViewChange} onBack={handleBack} onForward={handleForward} checkForEvent={checkForEvent} />
           <div className="right-column">
             {view === 'home' && <HomePage companyStats={companyStats} />}
             {view === 'main' && (
@@ -83,6 +101,7 @@ function App() {
                 matches={matches} 
                 matchResult={`Result of ${matches[currentMatchIndex]}`} 
                 handleNextMatch={handleNextMatch} 
+                wrestlers={selectedEvent.wrestlers} // Pass wrestlers to EventSimulation
               />
             )}
           </div>

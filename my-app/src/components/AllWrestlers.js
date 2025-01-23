@@ -4,7 +4,7 @@ import wrestlers from '../wrestlersDirectory';
 function AllWrestlers() {
   return (
     <div className="all-wrestlers">
-      <h2>All Wrestlers</h2>
+      <h1>All Wrestlers</h1>
       <table>
         <thead>
           <tr>

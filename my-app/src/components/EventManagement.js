@@ -28,6 +28,7 @@ function EventManagement({ onViewChange, selectedEvent }) {
 
   return (
     <div className="event-management">
+      <h1>Event Management</h1>
       <button className="pretty-button">Play Event</button>
       <h2>Events</h2>
       <p>Details of the events are listed below.</p>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { DateContext } from '../contexts/DateContext';
 
-function LeftColumn({ handleViewChange, onBack, onForward }) {
+function LeftColumn({ handleViewChange, onBack, onForward, checkForEvent }) {
   const { currentDate, progressDate } = useContext(DateContext);
 
   const formattedDate = currentDate.toLocaleDateString('en-GB');
@@ -12,7 +12,16 @@ function LeftColumn({ handleViewChange, onBack, onForward }) {
 
   const handleContinue = () => {
     progressDate();
-    console.log('Continue button clicked');
+    setTimeout(() => {
+      const nextDate = new Date(currentDate.getTime() + 86400000); // Next day
+      const event = checkForEvent(nextDate);
+      if (event) {
+        console.log('There is an event today!');
+        handleViewChange('eventManagement', event);
+      } else {
+        console.log('Continue button clicked');
+      }
+    }, 0);
   };
 
   return (
