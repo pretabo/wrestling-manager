@@ -1,5 +1,5 @@
 :root {
-  --dark-purple: #2e004f;
+  --dark-purple: #3608ab;
   --medium-purple: #4b0082;
   --light-purple: #9370db;
   --light-text: #f0f0f0;
@@ -28,8 +28,10 @@ body {
 }
 
 .left-column {
-  background-color: #f0f0f0;
+  background-color: #a8dadc; /* Pastel teal background color */
+  color: #1d3557; /* Dark blue text color */
   padding: 20px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,6 +39,7 @@ body {
 }
 
 .date-box {
+  font-size: 1.2em;
   margin-bottom: 20px;
   padding: 10px;
   background-color: var(--light-purple);
@@ -48,20 +51,19 @@ body {
 }
 
 .pretty-button {
-  margin: 10px 0;
-  padding: 10px 20px;
-  background-color: var(--light-purple);
-  color: var(--dark-purple);
+  background-color: #457b9d; /* Pastel blue background color */
+  color: #f1faee; /* Pastel white text color */
   border: none;
-  border-radius: 4px;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 3px;
   cursor: pointer;
   width: 100%;
   text-align: center;
 }
 
 .pretty-button:hover {
-  background-color: var(--button-hover);
-  color: var(--light-text);
+  background-color: #1d3557; /* Dark blue hover color */
 }
 
 .pretty-button.saved {
@@ -72,24 +74,24 @@ body {
 .nav-buttons {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
   width: 100%;
 }
 
 .nav-button {
-  margin: 10px 5px; /* Adjust margin to add space between buttons */
-  padding: 10px;
-  background-color: var(--light-purple);
-  color: var(--dark-purple);
+  background-color: #f1faee; /* Pastel white background color */
+  color: #1d3557; /* Dark blue text color */
   border: none;
-  border-radius: 4px;
+  padding: 10px;
+  border-radius: 3px;
   cursor: pointer;
   flex: 1; /* Make buttons take equal space */
   text-align: center;
+  margin: 10px 5px; /* Adjust margin to add space between buttons */
 }
 
 .nav-button:hover {
-  background-color: var(--button-hover);
-  color: var(--light-text);
+  background-color: #e63946; /* Pastel red hover color */
 }
 
 .main-area {
@@ -196,7 +198,7 @@ th {
 .matches-column .drop-zone:hover,
 .matches-column .drop-zone.drag-over {
   background-color: var(--button-hover);
-  color: var(--light-text);
+  color: var (--light-text);
 }
 
 .selected-match {

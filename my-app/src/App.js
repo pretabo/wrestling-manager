@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import LeftColumn from './components/LeftColumn';
 import MainArea from './components/MainArea';
@@ -8,8 +8,13 @@ import Roster from './components/Roster';
 import EventSimulation from './components/EventSimulation';
 import HomePage from './components/HomePage';
 import WrestlingIndustry from './components/WrestlingIndustry';
+import EventPreview from './components/EventPreview';
+import Modal from './components/Modal';
 import { DateProvider } from './contexts/DateContext';
-import { CompanyProvider } from './contexts/CompanyContext';
+import { CompanyProvider, CompanyContext } from './contexts/CompanyContext';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import MatchManagement from './components/MatchManagement';
+
 
 function App() {
   const [view, setView] = useState('home');
@@ -20,13 +25,15 @@ function App() {
   const [matches, setMatches] = useState([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
   const [companyStats, setCompanyStats] = useState({
-    totalMoney: 1000000,
+    totalMoney: 1000, // Example initial value
     wrestlers: 20,
-    upcomingEvents: [
-      { name: 'Event 1', date: new Date(2025, 0, 2), matches: ['Match 1', 'Match 2'], wrestlers: [['Wrestler 1', 'Wrestler 2'], ['Wrestler 3', 'Wrestler 4']] },
-      { name: 'Event 2', date: new Date(2025, 0, 3), matches: ['Match 3', 'Match 4'], wrestlers: [['Wrestler 5', 'Wrestler 6'], ['Wrestler 7', 'Wrestler 8']] }
-    ]
+    upcomingEvents: []
   });
+  const [companyEvents, setCompanyEvents] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+
+
 
   const handleNextMatch = () => {
     setCurrentMatchIndex((prevIndex) => (prevIndex + 1) % matches.length);
@@ -69,6 +76,8 @@ function App() {
       setEventToday(true);
       setSelectedEvent(event);
       setMatches(event.matches); // Ensure matches are set for the selected event
+      setModalContent(`There is an event today: ${event.name}`);
+      setShowModal(true);
       return event;
     } else {
       setEventToday(false);
@@ -78,35 +87,52 @@ function App() {
     }
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <DateProvider>
-      <CompanyProvider>
-        <div className="app-container">
-          <LeftColumn handleViewChange={handleViewChange} onBack={handleBack} onForward={handleForward} checkForEvent={checkForEvent} />
-          <div className="right-column">
-            {view === 'home' && <HomePage companyStats={companyStats} />}
-            {view === 'main' && (
-              <div className="main-view">
-                <MainArea />
-                <EventManagement />
-                <AllWrestlers />
-                <Roster />
-              </div>
-            )}
-            {view === 'eventManagement' && <EventManagement />}
-            {view === 'allWrestlers' && <AllWrestlers />}
-            {view === 'wrestlingIndustry' && <WrestlingIndustry />}
-            {view === 'eventSimulation' && matches && matches.length > 0 && (
-              <EventSimulation 
-                matches={matches} 
-                matchResult={`Result of ${matches[currentMatchIndex]}`} 
-                handleNextMatch={handleNextMatch} 
-                wrestlers={selectedEvent.wrestlers} // Pass wrestlers to EventSimulation
-              />
-            )}
+      <CompanyContext.Provider value={{ companyStats, setCompanyStats, companyEvents, setCompanyEvents }}>
+        <Router>
+          <div className="app-container">
+            <LeftColumn handleViewChange={handleViewChange} onBack={handleBack} onForward={handleForward} checkForEvent={checkForEvent} />
+            <div className="right-column">
+              <Routes>
+                <Route path="/event-management" element={<EventManagement />} />
+                <Route path="/match-management/:eventId" element={<MatchManagement />} />
+                <Route path="/all-wrestlers" element={<AllWrestlers />} />
+                <Route path="/" element={<HomePage />} />
+              </Routes>
+              {view === 'main' && (
+                <div className="main-view">
+                  <MainArea />
+                  <EventManagement companyStats={companyStats} setCompanyStats={setCompanyStats} handleViewChange={handleViewChange} />
+                  <AllWrestlers />
+                  <Roster />
+                </div>
+              )}
+              {view === 'allWrestlers' && <AllWrestlers />}
+              {view === 'wrestlingIndustry' && <WrestlingIndustry />}
+              {view === 'eventSimulation' && matches && matches.length > 0 && (
+                <EventSimulation 
+                  matches={matches} 
+                  matchResult={`Result of ${matches[currentMatchIndex]}`} 
+                  handleNextMatch={handleNextMatch} 
+                  wrestlers={selectedEvent.wrestlers} // Pass wrestlers to EventSimulation
+                />
+              )}
+              {view === 'eventPreview' && selectedEvent && (
+                <EventPreview event={selectedEvent} />
+              )}
+            </div>
+            <Modal show={showModal} onClose={closeModal}>
+              <p>{modalContent}</p>
+              <button onClick={() => handleViewChange('eventManagement', selectedEvent)} className="pretty-button">Go to Event</button>
+            </Modal>
           </div>
-        </div>
-      </CompanyProvider>
+        </Router>
+      </CompanyContext.Provider>
     </DateProvider>
   );
 }

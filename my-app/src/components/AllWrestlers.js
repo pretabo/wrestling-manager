@@ -2,6 +2,8 @@ import React from 'react';
 import wrestlers from '../wrestlersDirectory';
 
 function AllWrestlers() {
+
+  console.log(wrestlers);
   return (
     <div className="all-wrestlers">
       <h1>All Wrestlers</h1>

@@ -1,23 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CompanyContext } from '../contexts/CompanyContext';
 
-function HomePage({ companyStats }) {
+function HomePage() {
+  const { companyStats } = useContext(CompanyContext);
+  const navigate = useNavigate();
+
+  if (!companyStats) {
+    return <div>Wrestling Manager</div>;
+  }
+
   return (
-    <div className="home-page">
-      <h1>Home</h1>
-      <h2>Company Stats</h2>
-      <p>Total Money: ${companyStats.totalMoney}</p>
-      <p>Wrestlers on Roster: {companyStats.wrestlers}</p>
-      <h2>Upcoming Events</h2>
-      {companyStats.upcomingEvents.map((event, index) => (
-        <div key={index}>
-          <h3>{event.name}</h3>
-          <ul>
-            {event.matches.map((match, matchIndex) => (
-              <li key={matchIndex}>{match}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div>
+      <h1>Welcome to the Wrestling Manager</h1>
+      <p>Total Money: {companyStats.totalMoney}</p>
+      {/* Other UI elements */}
     </div>
   );
 }

@@ -1,9 +1,13 @@
 import React from 'react';
 
-function EventSimulation({ event, onBack }) {
+function EventPreview({ event }) {
+  if (!event) {
+    return <div>No event selected</div>;
+  }
+
   return (
-    <div className="event-simulation">
-      <h1>Event Simulation</h1>
+    <div className="event-preview">
+      <h1>Event Preview</h1>
       <h2>{event.name}</h2>
       <h3>Matches</h3>
       <ul>
@@ -30,9 +34,8 @@ function EventSimulation({ event, onBack }) {
           ))}
         </tbody>
       </table>
-      <button onClick={onBack}>Back</button>
     </div>
   );
 }
 
-export default EventSimulation;
+export default EventPreview;

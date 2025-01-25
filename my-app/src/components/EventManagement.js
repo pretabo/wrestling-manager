@@ -1,59 +1,40 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CompanyContext } from '../contexts/CompanyContext';
-import MatchManagement from './MatchManagement';
-import EventSimulation from './EventSimulation';
 
-function EventManagement({ onViewChange, selectedEvent }) {
+function EventManagement() {
   const { companyEvents } = useContext(CompanyContext);
-  const [selectedEventState, setSelectedEventState] = useState(selectedEvent);
-  const [isPlayingEvent, setIsPlayingEvent] = useState(false);
+  // const [newEventName, setNewEventName] = useState('');
+  // const [newEventDate, setNewEventDate] = useState(''); 
+  // const [newEventMatches, setNewEventMatches] = useState([]);
+  // const [newEventWrestlers, setNewEventWrestlers] = useState([['', ''], ['', '']]);
+  // const [isPlayingEvent, setIsPlayingEvent] = useState(false);
+  // const [selectedEventState, setSelectedEventState] = useState(null);
+  const navigate = useNavigate();
+  console.log('Event Management');
+  console.log(companyEvents);
 
-  useEffect(() => {
-    if (selectedEvent) {
-      setSelectedEventState(selectedEvent);
-    }
-  }, [selectedEvent]);
-
-  const handlePlayEvent = () => {
-    setIsPlayingEvent(true);
+  const handlePlayEvent = (eventId) => {
+    // Your logic to play the event
+    console.log('Play event', eventId);
   };
 
-  if (isPlayingEvent && selectedEventState) {
-    return <EventSimulation event={selectedEventState} onBack={() => setIsPlayingEvent(false)} />;
-  }
-
-  if (selectedEventState) {
-    return <MatchManagement event={selectedEventState} onBack={() => setSelectedEventState(null)} onPlayEvent={handlePlayEvent} />;
-  }
+  const handleManageMatches = (eventId) => {
+    navigate(`/match-management/${eventId}`);
+  };
 
   return (
     <div className="event-management">
+    <div>
       <h1>Event Management</h1>
-      <button className="pretty-button">Play Event</button>
-      <h2>Events</h2>
-      <p>Details of the events are listed below.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Event Name</th>
-            <th>Date</th>
-            <th>Prestige</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {companyEvents.map((event, index) => (
-            <tr key={index}>
-              <td>{event.name}</td>
-              <td>{event.date}</td>
-              <td>{event.prestige}</td>
-              <td>
-                <button className="pretty-button" onClick={() => setSelectedEventState(event)}>Manage Matches</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* {companyEvents.map(event => (
+        <div key={event.id}>
+          <h2>{event.name}</h2>
+          <button onClick={() => handleManageMatches(event.id)}>Manage Matches</button>
+          <button onClick={() => handlePlayEvent(event.id)}>Play Event</button>
+        </div>
+      ))} */}
+    </div>
     </div>
   );
 }

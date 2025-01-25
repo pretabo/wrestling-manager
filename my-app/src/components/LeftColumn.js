@@ -17,11 +17,15 @@ function LeftColumn({ handleViewChange, onBack, onForward, checkForEvent }) {
       const event = checkForEvent(nextDate);
       if (event) {
         console.log('There is an event today!');
-        handleViewChange('eventManagement', event);
+        handleViewChange('eventPreview', event);
       } else {
         console.log('Continue button clicked');
       }
     }, 0);
+  };
+
+  const handleButtonClick = (buttonName) => {
+    console.log(`${buttonName} button clicked`);
   };
 
   return (
